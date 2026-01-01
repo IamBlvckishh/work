@@ -6,6 +6,13 @@ let quests = JSON.parse(localStorage.getItem('work_quests')) || [
     {id: 1, title: "CLEAN_CODE_BOUNTY_01", reward: 0.5}
 ];
 
+const competitors = [
+    { name: "ZERO_COOL", xp: 5200, tier: "ELITE" },
+    { name: "ACID_BURN", xp: 4800, tier: "ELITE" },
+    { name: "PHREAK_99", xp: 3200, tier: "SENIOR" },
+    { name: "CEREAL_K", xp: 1500, tier: "PRO" }
+];
+
 // --- NAVIGATION ---
 function showTab(tabId) {
     document.querySelectorAll('.v-content').forEach(t => t.classList.remove('active'));
@@ -44,9 +51,9 @@ function deployQuest() {
     
     document.getElementById('qTitle').value = "";
     document.getElementById('qRew').value = "";
-    showTab('quests');
     updateUI();
     triggerStatusAlert();
+    alert("BOUNTY_DEPLOYED");
 }
 
 function completeQuest(id, r, title) {
@@ -70,46 +77,53 @@ function renderQuests() {
     feed.innerHTML = quests.map(q => `
         <div class="quest-item">
             <h4 style="margin:0">${q.title}</h4>
-            <p class="code-comment">VAL: ${q.reward} MATIC // LVL: 1</p>
+            <p class="code-comment">VAL: ${q.reward} MATIC // STATUS: OPEN</p>
             <button class="vibe-btn" onclick="completeQuest(${q.id}, ${q.reward}, '${q.title}')">EXECUTE</button>
         </div>
     `).join('');
 }
 
 function renderLeaderboard() {
-    const board = document.getElementById('leaderboard');
-    const all = [{ name: "YOU", xp: xp, isMe: true }, { name: "ROOT_USER", xp: 2100 }, { name: "GHOST_DEB", xp: 1400 }].sort((a,b) => b.xp - a.xp);
-    board.innerHTML = all.map((u, i) => `
-        <tr style="border-bottom: 1px solid #111; ${u.isMe ? 'background:white; color:black;' : ''}">
-            <td style="padding:15px">#${i+1}</td>
-            <td>${u.name}</td>
-            <td style="text-align:right; padding-right:15px">${u.xp} XP</td>
-        </tr>
-    `).join('');
+    const list = document.getElementById('leaderboard-list');
+    const spotlight = document.getElementById('user-spotlight');
+    const all = [...competitors, { name: "YOU", xp: xp, isMe: true, tier: xp > 2000 ? "PRO" : "ROOKIE" }]
+                .sort((a, b) => b.xp - a.xp);
+
+    const maxXP = all[0].xp;
+    
+    list.innerHTML = all.map((u, i) => {
+        const powerPercent = (u.xp / maxXP) * 100;
+        const html = `
+            <div class="rank-card ${u.isMe ? 'spotlight' : ''}">
+                <div class="rank-num">#${i + 1}</div>
+                <div class="rank-info">
+                    <span>${u.name}</span><span class="tier-tag">${u.tier}</span>
+                </div>
+                <div class="rank-stat" style="text-align:right">
+                    <span>${u.xp} XP</span>
+                    <div class="power-bar-wrap"><div class="power-bar-fill" style="width: ${powerPercent}%"></div></div>
+                </div>
+            </div>`;
+        if (u.isMe) spotlight.innerHTML = html;
+        return html;
+    }).join('');
 }
 
 function renderHistory() {
     const feed = document.getElementById('history-feed');
     feed.innerHTML = history.map(h => `
         <div class="history-item">
-            <div style="display:flex; justify-content:space-between">
-                <span>> ${h.task}</span>
-                <span style="color:${h.amt < 0 ? 'red' : 'white'}">${h.amt > 0 ? '+' : ''}${h.amt}</span>
-            </div>
-            <p class="code-comment" style="margin:5px 0 0 0">${h.time}</p>
-        </div>
-    `).join('');
+            <div style="display:flex; justify-content:space-between"><span>> ${h.task}</span><span style="color:${h.amt < 0 ? 'red' : 'white'}">${h.amt > 0 ? '+' : ''}${h.amt}</span></div>
+            <p class="code-comment" style="margin-top:5px">${h.time}</p>
+        </div>`).join('');
 }
 
 // --- WITHDRAW ---
-function openWithdraw() { 
-    if(balance <= 0) return alert("NO_FUNDS");
-    document.getElementById('modal-bal').innerText = balance.toFixed(2);
-    document.getElementById('withdraw-modal').style.display = 'flex'; 
-}
+function openWithdraw() { document.getElementById('modal-bal').innerText = balance.toFixed(2); document.getElementById('withdraw-modal').style.display = 'flex'; }
 function closeWithdraw() { document.getElementById('withdraw-modal').style.display = 'none'; }
 function processWithdraw() {
-    history.unshift({ task: "LIQUIDATION_EVENT", amt: -balance, time: new Date().toLocaleTimeString() });
+    if(balance <= 0) return;
+    history.unshift({ task: "LIQUIDATION", amt: -balance, time: new Date().toLocaleTimeString() });
     balance = 0;
     localStorage.setItem('work_bal', balance);
     localStorage.setItem('work_hist', JSON.stringify(history.slice(0, 10)));
