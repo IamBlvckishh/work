@@ -3,64 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WORK.OS | Monochromatic Edition</title>
+    <title>WORK // BOUNTY BOARD</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <nav>
-        <div class="logo">WORK<span>.</span></div>
-        <div class="stats-group">
-            <span id="nav-bal">0.00 MATIC</span>
-            <span id="nav-xp">0 XP</span>
+    <header class="vibe-nav">
+        <div class="brand">WORK<span>_</span>CORE</div>
+        <div class="terminal-stats">
+            <div class="stat-node">BAL: <span id="nav-bal">0.00</span> MATIC</div>
+            <div class="stat-node">RANK: <span id="nav-xp">0</span> XP</div>
+            <button class="vibe-btn small" onclick="openWithdraw()">[ WITHDRAW ]</button>
         </div>
+    </header>
+
+    <nav class="vibe-tabs">
+        <button class="v-tab active" onclick="showTab('quests')">OPEN_BOUNTIES</button>
+        <button class="v-tab" onclick="showTab('admin')">POST_QUEST</button>
+        <button class="v-tab" onclick="showTab('ranks')">TOP_BUILDERS</button>
     </nav>
 
-    <div class="tab-bar">
-        <button class="tab-btn active" onclick="showTab('quests')">Quests</button>
-        <button class="tab-btn" onclick="showTab('admin')">Create</button>
-        <button class="tab-btn" onclick="showTab('ranks')">Leaderboard</button>
-    </div>
-
-    <div class="container">
-        <section id="quests-tab" class="tab-content active">
-            <div class="section-header">
-                <h1>Available Work</h1>
-                <p>Complete tasks to earn instant rewards.</p>
-            </div>
-            <div id="quest-feed"></div>
+    <div class="vibe-container">
+        <section id="quests-tab" class="v-content active">
+            <div id="quest-feed" class="bounty-grid"></div>
             
-            <div class="history-box">
-                <h3>Recent Activity</h3>
+            <div class="activity-log">
+                <h3>// LATEST_EVENTS</h3>
                 <div id="history-feed"></div>
             </div>
         </section>
 
-        <section id="admin-tab" class="tab-content">
-            <div class="section-header">
-                <h1>Project Manager</h1>
-                <p>Deploy new incentivized tasks for the community.</p>
-            </div>
-            <div class="bento-card">
-                <div class="input-group">
-                    <label>Quest Title</label>
-                    <input type="text" id="qTitle" placeholder="e.g. Follow @WorkOnX">
-                    
-                    <label>Reward (MATIC)</label>
-                    <input type="number" id="qRew" placeholder="0.50">
-                </div>
-                <button class="btn-main" onclick="deployQuest()">Launch Campaign</button>
+        <section id="admin-tab" class="v-content">
+            <div class="bento-input">
+                <p class="code-comment">// INITIALIZE_NEW_BOUNTY</p>
+                <input type="text" id="qTitle" placeholder="BOUNTY_NAME">
+                <input type="number" id="qRew" placeholder="REWARD_AMOUNT_MATIC">
+                <button class="vibe-btn large" onclick="deployQuest()">GENERATE_QUEST_ID</button>
             </div>
         </section>
 
-        <section id="ranks-tab" class="tab-content">
-            <div class="section-header">
-                <h1>Leaderboard</h1>
-                <p>Global rankings based on XP earned through work.</p>
-            </div>
-            <div class="bento-card">
-                <table class="rank-table" id="leaderboard"></table>
-            </div>
+        <section id="ranks-tab" class="v-content">
+            <table class="vibe-table" id="leaderboard"></table>
         </section>
+    </div>
+
+    <div id="withdraw-modal" class="v-modal">
+        <div class="v-modal-box">
+            <h2>TRANS_OUT</h2>
+            <p>LIQUIDATING <span id="modal-bal">0.00</span> MATIC</p>
+            <input type="text" id="wallet-addr" placeholder="DESTINATION_ADDR">
+            <div class="v-modal-btns">
+                <button class="vibe-btn" onclick="processWithdraw()">CONFIRM</button>
+                <button class="vibe-btn ghost" onclick="closeWithdraw()">ABORT</button>
+            </div>
+        </div>
     </div>
 
     <script src="app.js"></script>
