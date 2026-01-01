@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work | Unified Quest System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">WORK<span>.OS</span></div>
+        <div class="stats-pill">
+            <span id="nav-bal">0.00 MATIC</span> • <span id="nav-xp">0 XP</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="bento-grid">
+            <div class="bento-card admin-box">
+                <h3>Campaign Manager</h3>
+                <div class="input-row">
+                    <input type="text" id="qTitle" placeholder="Quest Title">
+                    <input type="number" id="qRew" placeholder="Reward">
+                </div>
+                <button onclick="deployQuest()">Launch New Quest</button>
+            </div>
+            
+            <div class="bento-card stats-box">
+                <p class="label">Total Distributed</p>
+                <h2 id="total-dist">0.00</h2>
+                <p class="sub-label">MATIC in rewards</p>
+            </div>
+        </div>
+
+        <div class="bento-grid">
+            <div class="quest-list-container">
+                <h3>Available Quests</h3>
+                <div id="quest-feed"></div>
+            </div>
+
+            <div class="side-panel">
+                <div class="bento-card mb-20">
+                    <h3>Global Leaderboard</h3>
+                    <table class="rank-table" id="leaderboard"></table>
+                </div>
+
+                <div class="bento-card">
+                    <h3>Recent Activity</h3>
+                    <div id="history-feed"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
