@@ -3,16 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WORK // BOUNTY BOARD</title>
+    <title>WORK // BOUNTY_BOARD</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header class="vibe-nav">
         <div class="brand">WORK<span>_</span>CORE</div>
         <div class="terminal-stats">
-            <div class="stat-node">BAL: <span id="nav-bal">0.00</span> MATIC</div>
-            <div class="stat-node">RANK: <span id="nav-xp">0</span> XP</div>
-            <button class="vibe-btn small" onclick="openWithdraw()">[ WITHDRAW ]</button>
+            <div class="stat-node">
+                <span id="status-indicator" class="pulse-green"></span>
+                BAL: <span id="nav-bal">0.00</span>
+            </div>
+            <div class="stat-node">RANK: <span id="nav-xp">0</span></div>
+            
+            <div class="nav-actions">
+                <button class="vibe-btn small" onclick="toggleActivity()">[ ACTIVITY ]</button>
+                <button class="vibe-btn small" onclick="openWithdraw()">[ WITHDRAW ]</button>
+            </div>
         </div>
     </header>
 
@@ -25,11 +32,6 @@
     <div class="vibe-container">
         <section id="quests-tab" class="v-content active">
             <div id="quest-feed" class="bounty-grid"></div>
-            
-            <div class="activity-log">
-                <h3>// LATEST_EVENTS</h3>
-                <div id="history-feed"></div>
-            </div>
         </section>
 
         <section id="admin-tab" class="v-content">
@@ -44,6 +46,16 @@
         <section id="ranks-tab" class="v-content">
             <table class="vibe-table" id="leaderboard"></table>
         </section>
+    </div>
+
+    <div id="activity-drawer" class="v-drawer">
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h3>// SYSTEM_LOGS</h3>
+                <button class="close-btn" onclick="toggleActivity()">[ X ]</button>
+            </div>
+            <div id="history-feed" class="drawer-list"></div>
+        </div>
     </div>
 
     <div id="withdraw-modal" class="v-modal">
